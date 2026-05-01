@@ -572,7 +572,6 @@ window.goToProfile = function(id) {
   box.innerHTML = `
     🏆 Ostatni MVP:
     <b>${data.players.avatar || "👤"} ${data.players.name}</b>
-    (+${data.points_gain})
   `;
 }
   
