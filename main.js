@@ -223,17 +223,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       </tr>
     `;
   });
+}
 
-
-  window.goToProfile = function(id){
-    window.location.href = `profile.html?id=${id}`;
-       
+window.goToProfile = function(id) {
+  window.location.href = `profile.html?id=${id}`;
+};
     
-        console.log("PLAYER ID:", p.id);
-        console.log("YESTERDAY:", yesterdayRatings[p.id]);
-        console.log("MAP:", yesterdayRatings);
-  };
-
   /* ================= ROLE FIX ================= */
 
   function getCurrentPlayer(userEmail) {
