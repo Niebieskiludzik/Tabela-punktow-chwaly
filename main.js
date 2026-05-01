@@ -543,6 +543,39 @@ window.goToProfile = function(id) {
     select.appendChild(opt);
   });
 }
+
+  /* ================= Ostatni MVP ================= */
+
+  async function loadLastMVP() {
+
+  const box = document.getElementById("lastMvpBox");
+  if (!box) return;
+
+  const { data } = await supabase
+    .from("mvp_history")
+    .select(`
+      *,
+      players (
+        name,
+        avatar
+      )
+    `)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (!data) {
+    box.innerHTML = "🏆 Ostatni MVP: brak danych";
+    return;
+  }
+
+  box.innerHTML = `
+    🏆 Ostatni MVP:
+    <b>${data.players.avatar || "👤"} ${data.players.name}</b>
+    (+${data.points_gain})
+  `;
+}
+  
   /* ================= INIT ================= */
 
 async function init() {
