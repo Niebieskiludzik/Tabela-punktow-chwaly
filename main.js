@@ -596,6 +596,7 @@ async function init() {
   await ensureRound(datePicker.value);
   await loadYesterdayRatings();
   await loadPlayers();
+  await loadLastMVP();
 
   applyPermissions();
   updateDateDisplay();
