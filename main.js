@@ -260,7 +260,7 @@ window.goToProfile = function(id) {
       `;
       return;
     }
-
+  
     const role = currentPlayer.role || "user";
 
     const selectedDate = new Date(datePicker.value);
@@ -324,6 +324,42 @@ window.goToProfile = function(id) {
     });
   }
 
+  /* ================= MVP ================= */
+
+  
+  async function calculateAndSaveMVP() {
+
+  let bestPlayer = null;
+  let bestGain = -999999;
+
+  players.forEach(player => {
+    const oldRating = yesterdayRatings[player.id] ?? player.rating;
+    const gain = Math.round(player.rating - oldRating);
+
+    if (gain > bestGain) {
+      bestGain = gain;
+      bestPlayer = player;
+    }
+  });
+
+  if (!bestPlayer) return;
+
+  // usuń stare MVP tej rundy (żeby nie duplikować)
+  await supabase
+    .from("mvp_history")
+    .delete()
+    .eq("round_id", currentRoundId);
+
+  // zapisz nowe MVP
+  await supabase
+    .from("mvp_history")
+    .insert({
+      round_id: currentRoundId,
+      player_id: bestPlayer.id,
+      points_gain: bestGain
+    });
+}
+
   /* ================= SAVE ================= */
 
   window.saveVotes = async function (voterName) {
@@ -355,6 +391,7 @@ window.goToProfile = function(id) {
       await supabase.rpc("update_players_rating");
 
       await loadPlayers();
+      await calculateAndSaveMVP();
 
       hideLoaderSuccess();
 
